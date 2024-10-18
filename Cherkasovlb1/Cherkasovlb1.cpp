@@ -14,7 +14,7 @@ struct Pipe {
 		cin >> name;
 		cout << "Enter pipe`s length: ";
 		cin >> length;
-		cout << "Enter pipe`s diameter";
+		cout << "Enter pipe`s diameter: ";
 		cin >> diameter;
 		inRepair = false;
 	}
@@ -34,12 +34,12 @@ struct CS {
 	double efficiency;
 
 	void input() {
-		cout << "Enter CS`s shop: ";
+		cout << "Enter CS`s name: ";
 		cin >> name;
-		cout << "Enter number of Shops: ";
+		cout << "Enter number of Shops (kol-vo Cehov): ";
 		cin >> NumberofShops;
 		RabochieShops = 0;
-		cout << "Enter efficiency";
+		cout << "Enter efficiency: ";
 		cin >> efficiency;
 	}
 	void display() const {
@@ -100,7 +100,7 @@ void loadFromFile() {
 
 void menu() {
 	while (true) {
-		cout << "\n1. Add pipe\n2. Add CS\n3. view all objects\n4. Redact Pipe\n5. Redact CS\n6. Save\n7. Load\n0. EXIT\n";
+		cout << "\n1. Add pipe\n2. Add CS\n3. view all objects\n4. Redact Pipe\n5. Redact CS\n6. Save\n7. UPLoad data\n0. EXIT\n";
 		int choice;
 		cin >> choice;
 		switch (choice) {
@@ -122,30 +122,66 @@ void menu() {
 			break;
 		}
 		case 4: {
-			cout << "Enter pipe`s name to redact";
+			cout << "Enter pipe`s name to redact: " << endl;
 			string name;
 			cin >> name;
 			for (auto& pipe : pipes) {
 				if (pipe.name == name) {
-					pipe.Repair();
-					cout << "The sign in the repair has been changed";
+					cout << "Enter number for 1 to 3\n1. change length\n2. change diameter\n3 change status of Repair\n";
+					int minichoice;
+					cin >> minichoice;
+					switch (minichoice) {
+					case 1: {
+						cout << "Enter new length: " << endl; 
+						cin >> pipe.length;
+						break;
+					}
+					case 2: {
+						cout << "Enter new diameter: ";
+						cin >> pipe.diameter;
+						break;
+					}
+					case 3: {
+						cout << "Change status of Repair ";
+						pipe.Repair();
+						break;
+					}
+					default:
+						cout << "The wrong number, please try agan" << endl;
+					}
+					cout << "The sign in the repair has been changed" << endl;
 					break;
 				}
 			}
 			break;
 		}
 		case 5: {
-			cout << "Enter CS`s name for redact";
+			cout << "Enter CS`s name for redact: " << endl;
 			string name;
 			cin >> name;
 			for (auto& station : stations) {
 				if (station.name == name) {
 					int action;
-					cout << "1. Start shop\n2. stop shop";
+					cout << " Enter number for 1 to 3";
+					cout << "1. Start shop\n2. stop shop\n3. change number of shops( kol-vo cehov)\n";
 					cin >> action;
-					if (action == 1)station.startShop();
-					else if (action == 2)station.stopShop();
-					break;
+					switch (action) {
+					case 1: {
+						station.startShop();
+						break;
+					}
+					case 2: {
+						station.stopShop();
+						break;
+					}
+					case 3: {
+						cin >> station.NumberofShops;
+						break;
+					}
+					default:
+						  cout << "the wrong number, try again\n";
+					}
+					
 				}
 			}
 			break;
