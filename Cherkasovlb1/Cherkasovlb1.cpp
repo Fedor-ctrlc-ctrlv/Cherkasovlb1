@@ -65,9 +65,12 @@ struct CS {
 	}
 
 };
+vector<Pipe> pipes;
+vector<CS> stations;
+
 void saveToFile() {
 	ofstream file("data.txt");
-	for (const auto& pipe : pipes) {
+	for (const auto& pipe:pipes) {
 		file << "Pipe " << pipe.name << " " << pipe.length << " " << pipe.diameter << " " << pipe.inRepair << "\n";
 	}
 	for (const auto& station : stations) {
@@ -94,8 +97,6 @@ void loadFromFile() {
 	file.close();
 	cout << "data has been load from file";
 }
-vector<Pipe> pipes;
-vector<CS> stations;
 
 void menu() {
 	while (true) {
