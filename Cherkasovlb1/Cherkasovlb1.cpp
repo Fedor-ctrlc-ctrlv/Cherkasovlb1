@@ -42,13 +42,41 @@ struct CS {
 		cin >> efficiency;
 	}
 	void display() const {
-		cout << "CS: " << name < " ,Shops: " << NumberofShops << ", in works: " << RabochieShops << ", effectiveness" << efficiency << endl;
+		cout << "CS: " << name << "Total shops:" << NumberofShops << ", in works: " << RabochieShops << ", effectiveness" << efficiency << endl;
+	}
+	void startShop() {
+		if (RabochieShops < NumberofShops) {
+			RabochieShops++;
+			cout << "Shop start working" << endl;
+		}
+		else {
+			cout << "ALL SHOPS ARE WORKING" << endl;
+		}
+	}
+	void stopShop() {
+		if (RabochieShops > 0) {
+			RabochieShops--;
+			cout << "shop stoped"<<endl;
+		}
+		else {
+			cout << "No working shop" << endl;
+		}
 	}
 
 };
-
+vector<Pipe> pipes;
+vector<CS> stations;
 
 int main(){
+	while (true) {
+		cout << "\n1. Add pipe\n2. Add CS\n3. view all objects\n4. Redact Pipe\n5. Redact CS\n6. Save\n7. Load\n8. EXIT";
+		int choice;
+		cin >> choice;
+		switch (choice) {
+		case 1: {
 
+		}
+		}
+	}
 }
 
