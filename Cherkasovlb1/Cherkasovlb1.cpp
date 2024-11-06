@@ -1,7 +1,9 @@
 ﻿#include <iostream>
 #include <string>
 #include <fstream>
+
 using namespace std;
+
 struct Pipe {
     string name;
     int length;
@@ -15,6 +17,20 @@ struct PumpingStation {
     int activeShops;
     double efficiency;
 }; 
+
+bool inp_bool() {
+    bool bb;
+    while (1) {
+        cin >> bb;
+        if (cin.fail()) {
+            cin.clear();
+            cout << "Incorrect input,try again" << endl;
+        };
+        break;
+    };
+    return bb;
+};
+
 void inputPipe(Pipe& pipe) {
     cout << "Enter pipe name: ";
     cin.ignore();
@@ -24,21 +40,29 @@ void inputPipe(Pipe& pipe) {
     while (!(cin >> pipe.length)) {
         cout << "Invalid input. Please enter a number for length: ";
         cin.clear();
-        cin.ignore(10000, '\n'); // Clear input buffer
+        cin.ignore(10000, '\n'); 
     }
 
     cout << "Enter diameter: ";
     while (!(cin >> pipe.diameter)) {
         cout << "Invalid input. Please enter a number for diameter: ";
         cin.clear();
-        cin.ignore(10000, '\n'); // Clear input buffer
+        cin.ignore(10000, '\n'); 
     }
 
-    char repairStatus;
-    cout << "Is the pipe under repair? (y/n): ";
-    cin >> repairStatus;
-    pipe.underRepair = (repairStatus == 'y' || repairStatus == 'Y');
+    cout << "Pipe in repair? " << endl;
+    pipe.underRepair = inp_bool();
 }
+
+int proverka(int a, int b) {
+    int num;
+    while (!(cin >> num)) {
+        cout << "Invalid input. TRY AGAIN: ";
+        cin.clear();
+        cin.ignore(10000, '\n');
+    }
+    return num;
+};
 
 void inputPumpingStation(PumpingStation& ps) {
     cout << "Enter pumping station name: ";
@@ -49,21 +73,21 @@ void inputPumpingStation(PumpingStation& ps) {
     while (!(cin >> ps.totalShops)) {
         cout << "Invalid input. Please enter a number for total shops: ";
         cin.clear();
-        cin.ignore(10000, '\n'); // Clear input buffer
+        cin.ignore(10000, '\n'); 
     }
 
     cout << "Enter number of active shops: ";
-    while (!(cin >> ps.activeShops)) {
-        cout << "Invalid input. Please enter a number for active shops: ";
+    while (!(cin >> ps.activeShops)|| ps.activeShops>ps.totalShops) {
+        cout << "Invalid input. Please enter a number for active shops (ACTIVESHOPS>TOTALSHOPS-UNREAL): ";
         cin.clear();
-        cin.ignore(10000, '\n'); // Clear input buffer
+        cin.ignore(10000, '\n'); 
     }
 
     cout << "Enter efficiency: ";
     while (!(cin >> ps.efficiency)) {
         cout << "Invalid input. Please enter a number for efficiency: ";
         cin.clear();
-        cin.ignore(10000, '\n'); // Clear input buffer
+        cin.ignore(10000, '\n'); 
     }
 }
 
@@ -82,37 +106,45 @@ void displayPumpingStation(const PumpingStation& ps) {
 }
 
 void editPipeRepairStatus(Pipe& pipe) {
-    char repairStatus;
-    cout << "Change repair status for pipe " << pipe.name << " (y/n): ";
-    cin >> repairStatus;
-    pipe.underRepair = (repairStatus == 'y' || repairStatus == 'Y');
+    if (!(pipe.name == "None")) {
+        pipe.underRepair = !pipe.underRepair;
+        cout << "Pokazatel izmenen";
+    }
+    else {
+        cout << "NEt TRUBI" << endl;
+    }
 }
 
 void editPumpingStationShops(PumpingStation& ps) {
-    char action;
-    cout << "Do you want to activate (a) or deactivate (d) a shop? ";
-    cin >> action;
+    if (!(ps.name == "None")) {
+        cout << "1 ACtivirovat shop" << endl;
+        cout << "2 Deactivirovat shop" << endl;
+        int action;
+        action = proverka(1, 2);
+        switch (action) {
+        case 1:
+            if (ps.activeShops < ps.totalShops) {
+                ps.activeShops++;
+                cout << "One shop activated.\n";
+            }
+            else {
+                cout << "All shops are already active.\n";
+            }
 
-    if (action == 'a' || action == 'A') {
-        if (ps.activeShops < ps.totalShops) {
-            ps.activeShops++;
-            cout << "One shop activated.\n";
-        }
-        else {
-            cout << "All shops are already active.\n";
-        }
-    }
-    else if (action == 'd' || action == 'D') {
-        if (ps.activeShops > 0) {
-            ps.activeShops--;
-            cout << "One shop deactivated.\n";
-        }
-        else {
-            cout << "No active shops to deactivate.\n";
+        case 2:
+            if (ps.activeShops > 0) {
+                ps.activeShops--;
+                cout << "One shop deactivated.\n";
+            }
+            else {
+                cout << "No active shops to deactivate.\n";
+            }
+        defualt:
+            cout << "Invalid action.\n";
         }
     }
     else {
-        cout << "Invalid action.\n";
+        cout << "NET PS" << endl;
     }
 }
 void view_all(const Pipe& pipe, const PumpingStation& ps) {
@@ -174,6 +206,8 @@ void info_ps_fr_file(PumpingStation& ps, ifstream& file) {
     file >> ps.efficiency;
 }
 void loadFromFile(Pipe& pipe, PumpingStation& ps) {
+    pipe = { "None" };
+    ps = { "None" };
     string line;
     ifstream file;
     file.open("data.txt");
@@ -207,7 +241,7 @@ int main() {
             << "0. Exit\n"
             << "Choose an action: ";
 
-        cin >> choice;
+        choice = proverka(0, 8);
 
         switch (choice) {
         case 1:
