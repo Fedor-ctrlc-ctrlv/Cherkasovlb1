@@ -20,13 +20,10 @@ struct PumpingStation {
 
 bool inp_bool() {
     bool bb;
-    while (1) {
-        cin >> bb;
-        if (cin.fail()) {
-            cin.clear();
-            cout << "Incorrect input,try again" << endl;
-        };
-        break;
+    while (!(cin >> bb)) {
+        cout << "Invalid input. Please enter a number for repair (1 in repair || 0 not in repair): ";
+        cin.clear();
+        cin.ignore(10000, '\n');
     };
     return bb;
 };
@@ -56,7 +53,7 @@ void inputPipe(Pipe& pipe) {
 
 int proverka(int a, int b) {
     int num;
-    while (!(cin >> num)) {
+    while (!(cin >> num)|| num<a || num>b) {
         cout << "Invalid input. TRY AGAIN: ";
         cin.clear();
         cin.ignore(10000, '\n');
@@ -130,7 +127,7 @@ void editPumpingStationShops(PumpingStation& ps) {
             else {
                 cout << "All shops are already active.\n";
             }
-
+            break;
         case 2:
             if (ps.activeShops > 0) {
                 ps.activeShops--;
@@ -139,8 +136,14 @@ void editPumpingStationShops(PumpingStation& ps) {
             else {
                 cout << "No active shops to deactivate.\n";
             }
-        defualt:
-            cout << "Invalid action.\n";
+            break;
+        default:
+            cout << "Invalid choice. Please try again.\n";
+            while (!(action == 1 || action == 2)) {
+                cin.clear();
+                cin.ignore(1000, '\n');
+                cin >> action;
+            }
         }
     }
     else {
@@ -251,7 +254,7 @@ int main() {
             inputPumpingStation(ps);
             break;
         case 3:
-            view_all(pipe,ps);
+            view_all(pipe, ps);
             break;
         case 4:
             editPipeRepairStatus(pipe);
